@@ -16,7 +16,7 @@
     <ImageView
         android:layout_width="200px"
         android:layout_height="180px"
-        android:src="@drawable/logo_metrorex"/>
+        android:src="@drawable/metrorex_sigla"/>
 
     <TextView
         android:layout_width="match_parent"
