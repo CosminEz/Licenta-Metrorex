@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Metrorex</string>
+    <string name="Username">Username</string>
+    <string name="username_hint">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="create">Register User</string>
+    <string name="singing">Already registered? Sign in here.</string>
+    <string name="tvlogin">Don\'t have an account yet ? Register here.</string>
+    <string name="tipabonament">Abonament:</string>
+    <string name="credit">Credit:</string>
+    <string name="cumpara">Cumpara Credit</string>
+    <string name="babonament">CUMPARA ABONAMENT</string>
+    <string name="title_activity_profile_drawer">ProfileDrawer</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
