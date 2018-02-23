@@ -166,16 +166,24 @@ public class ProfileDrawer extends AppCompatActivity
                 imageViewCloseButton.setVisibility(View.GONE);
             }
         });
-        buttonAbonament.setOnClickListener(new View.OnClickListener() {
+        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cumparaCalatorie();
             }
         });
-        imageViewCloseButton.setOnClickListener(new View.OnClickListener() {
+        buttonAbonament.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 cumparaAbonament();
+            }
+        });
+        imageViewCloseButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                listViewCalatorie.setVisibility(View.GONE);
+                imageViewCloseButton.setVisibility(View.GONE);
             }
         });
 
