@@ -2,8 +2,10 @@ package com.example.cosmin.metrorex.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 
 import com.example.cosmin.metrorex.Adapter.AbonamentAdapter;
 import com.example.cosmin.metrorex.Adapter.CalatorieAdapter;
@@ -37,12 +40,15 @@ import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
-public class ProfileDrawer extends AppCompatActivity
+public class Profile extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
     private FirebaseAuth firebaseAuth;
     private TextView textViewUserEmail;
     private Button buttonLogout;
@@ -68,13 +74,13 @@ public class ProfileDrawer extends AppCompatActivity
     private int creditNew;
     private int calatorieNew;
     private int abonamentNew;
-
+    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_drawer);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_profile);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMenu);
         setSupportActionBar(toolbar);
 
 
@@ -88,9 +94,6 @@ public class ProfileDrawer extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_drawer);
-
         firebaseAuth = FirebaseAuth.getInstance();
 
         if (firebaseAuth.getCurrentUser() == null) {
@@ -103,10 +106,9 @@ public class ProfileDrawer extends AppCompatActivity
         textViewCalatorii = (TextView) findViewById(R.id.tvcalatorii);
         textViewCredit = (TextView) findViewById(R.id.tvcredit);
         textViewAbonament = (TextView) findViewById(R.id.tvabonament);
-        buttonCumparaCredit = (Button) findViewById(R.id.bcredit);
+
         imageViewCloseButton = (ImageView) findViewById(R.id.im_close_button);
-        buttonCalatorie = (Button) findViewById(R.id.bcalatorie);
-        buttonAbonament = (Button) findViewById(R.id.babonament);
+
 
         textViewUserEmail = (TextView) findViewById(R.id.tvprofile);
         textViewUserEmail.setText("Welcome " + firebaseAuth.getCurrentUser().getEmail().toString().trim() + " !");
@@ -122,6 +124,13 @@ public class ProfileDrawer extends AppCompatActivity
                                 textViewCalatorii.setText(textViewCalatorii.getText().toString().trim() + userInformation.getNumarCalatorii());
                                 textViewCredit.setText(textViewCredit.getText().toString().trim() + userInformation.getCredit());
                                 textViewAbonament.setText(textViewAbonament.getText().toString().trim() + userInformation.getTipAbonament());
+                                if(userInformation.getTipAbonament().equals("Activ"))
+                                {
+                                    SimpleDateFormat fmtOut = new SimpleDateFormat("dd-MM-yyyy");
+
+                                    textViewAbonament.setText(textViewAbonament.getText().toString().trim()+ "\n" +
+                                    "Expira la : "+fmtOut.format(userInformation.getExpirareAbonament()));
+                                }
                             }
                         }
                     }
@@ -142,42 +151,37 @@ public class ProfileDrawer extends AppCompatActivity
             public void onClick(View view) {
                 firebaseAuth.signOut();
                 finish();
-                startActivity(new Intent(ProfileDrawer.this, Login.class));
+                startActivity(new Intent(Profile.this, Login.class));
             }
         });
-        buttonScaneaza.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                scan();
-            }
-        });
-        buttonCumparaCredit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cumparaCredit();
-            }
-        });
-        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listViewCredit.setVisibility(View.GONE);
-                listViewCalatorie.setVisibility(View.GONE);
-                listViewAbonament.setVisibility(View.GONE);
-                imageViewCloseButton.setVisibility(View.GONE);
-            }
-        });
-        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cumparaCalatorie();
-            }
-        });
-        buttonAbonament.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                cumparaAbonament();
-            }
-        });
+
+//        buttonCumparaCredit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                cumparaCredit();
+//            }
+//        });
+//        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                listViewCredit.setVisibility(View.GONE);
+//                listViewCalatorie.setVisibility(View.GONE);
+//                listViewAbonament.setVisibility(View.GONE);
+//                imageViewCloseButton.setVisibility(View.GONE);
+//            }
+//        });
+//        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                cumparaCalatorie();
+//            }
+//        });
+//        buttonAbonament.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                cumparaAbonament();
+//            }
+//        });
         imageViewCloseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -218,9 +222,34 @@ public class ProfileDrawer extends AppCompatActivity
         listViewCalatorie = (ListView) findViewById(R.id.lv_credit);
         listViewAbonament = (ListView) findViewById(R.id.lv_credit);
 
-
     }
 
+    private void checkAbonament()
+    {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(firebaseAuth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Date dataExpirareAbonament=dataSnapshot.child("expirareAbonament").getValue(Date.class);
+
+                        Calendar calendar = Calendar.getInstance();
+                        Date date=calendar.getTime();
+
+                        if(date.after(dataExpirareAbonament))
+                        {
+                            databaseReference.child(dataSnapshot.getKey()).child("tipAbonament").setValue("Expirat");
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
 
     private void showUpdatedInfo() {
         String S = textViewCredit.getText().toString().replaceAll("[0-9]+", "");
@@ -243,12 +272,14 @@ public class ProfileDrawer extends AppCompatActivity
 
     private void cumparaCredit() {
         listViewCalatorie.setVisibility(View.GONE);
+        listViewAbonament.setVisibility(View.GONE);
+
 
 
         listViewCredit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ProfileDrawer.this, "You added "+listViewCredit.getItemAtPosition(position).toString()+" credit", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Profile.this, "You added "+listViewCredit.getItemAtPosition(position).toString()+" credit", Toast.LENGTH_SHORT).show();
                 creditNew=(Integer)listViewCredit.getItemAtPosition(position);
 
 
@@ -274,7 +305,7 @@ public class ProfileDrawer extends AppCompatActivity
         });
 
 
-        CreditAdapter creditAdapter = new CreditAdapter(listCredit, ProfileDrawer.this);
+        CreditAdapter creditAdapter = new CreditAdapter(listCredit, Profile.this);
         listViewCredit.setAdapter(creditAdapter);
         listViewCredit.setVisibility(View.VISIBLE);
         imageViewCloseButton.setVisibility(View.VISIBLE);
@@ -282,6 +313,9 @@ public class ProfileDrawer extends AppCompatActivity
     }
 
     private void cumparaCalatorie(){
+        listViewAbonament.setVisibility(View.GONE);
+        listViewCredit.setVisibility(View.GONE);
+
         listViewCalatorie.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -302,10 +336,10 @@ public class ProfileDrawer extends AppCompatActivity
                                     userInformation.setCredit(creditNou);
                                     userInformation.setNumarCalatorii(calatorieNou);
                                     databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
-                                    Toast.makeText(ProfileDrawer.this,"You added "+calatorieNew+" calatorii",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this,"You added "+calatorieNew+" calatorii",Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(ProfileDrawer.this,"You don't have enough credit",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this,"You don't have enough credit",Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -322,7 +356,7 @@ public class ProfileDrawer extends AppCompatActivity
         });
         listViewCredit.setVisibility(View.GONE);
 
-        CalatorieAdapter calatorieAdapter = new CalatorieAdapter(listCalatorie,ProfileDrawer.this);
+        CalatorieAdapter calatorieAdapter = new CalatorieAdapter(listCalatorie,Profile.this);
         listViewCalatorie.setAdapter(calatorieAdapter);
         listViewCalatorie.setVisibility(View.VISIBLE);
         imageViewCloseButton.setVisibility(View.VISIBLE);
@@ -336,6 +370,7 @@ public class ProfileDrawer extends AppCompatActivity
         listViewCalatorie.setVisibility(View.GONE);
         listViewCredit.setVisibility(View.GONE);
 
+
         listViewAbonament.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -345,20 +380,28 @@ public class ProfileDrawer extends AppCompatActivity
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                int abonament=dataSnapshot.child("tipAbonament").getValue(Integer.class);
+
+                                Date dataExpirareAbonament=dataSnapshot.child("expirareAbonament").getValue(Date.class);
                                 int credit=dataSnapshot.child("credit").getValue(Integer.class);
-                                int abonamentNou=abonament+abonamentNew;
+
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(dataExpirareAbonament);
+                                calendar.add(Calendar.DATE,abonamentNew);
+
+                                Date dataExpirareAbonamentNou=calendar.getTime();
+
                                 int creditNou=credit - 4 * abonamentNew;
                                 if(creditNou >= 0){
                                     showUpdatedInfo();
                                     UserInformation userInformation=new UserInformation(dataSnapshot.getValue(UserInformation.class));
                                     userInformation.setCredit(creditNou);
-                                    userInformation.setTipAbonament(abonamentNou);
+                                    userInformation.setTipAbonament("Activ");
+                                    userInformation.setExpirareAbonament(dataExpirareAbonamentNou);
                                     databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
-                                    Toast.makeText(ProfileDrawer.this,"You added "+abonamentNou+" zile la abonament",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this,"You added "+abonamentNew+" zile la abonament",Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(ProfileDrawer.this,"You don't have enough credit",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this,"You don't have enough credit",Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -372,7 +415,7 @@ public class ProfileDrawer extends AppCompatActivity
 
             }
         });
-        AbonamentAdapter abonamentAdapter=new AbonamentAdapter(listAbonament,ProfileDrawer.this);
+        AbonamentAdapter abonamentAdapter=new AbonamentAdapter(listAbonament,Profile.this);
         listViewAbonament.setAdapter(abonamentAdapter);
         listViewAbonament.setVisibility(View.VISIBLE);
         imageViewCloseButton.setVisibility(View.VISIBLE);
@@ -396,46 +439,61 @@ public class ProfileDrawer extends AppCompatActivity
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null){
             if(result.getContents()==null){
-                Toast.makeText(ProfileDrawer.this,"Ai iesit din activitatea de scanare!",Toast.LENGTH_LONG).show();
+                Toast.makeText(Profile.this,"Ai iesit din activitatea de scanare!",Toast.LENGTH_LONG).show();
             }
             else {
                 StorageReference storageReference= FirebaseStorage.getInstance().getReference();
-                if(storageReference.child(result.getContents())!=null) {
-                    databaseReference = FirebaseDatabase.getInstance().getReference();
-                    databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
-                            addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    int calatorie = dataSnapshot.child("numarCalatorii").getValue(Integer.class);
-                                    int abonament = dataSnapshot.child("tipAbonament").getValue(Integer.class);
-                                    if(abonament > 0){
 
-                                        Toast.makeText(ProfileDrawer.this, "Succes! Zile ramase abonament:"+abonament , Toast.LENGTH_LONG).show();
+                if(storageReference.child(result.getContents().toString())!=null ) {
+                    String id=storageReference.child(result.getContents()).toString();
+
+                    if (id.contains("MetrorexPass")) {
+                        databaseReference = FirebaseDatabase.getInstance().getReference();
+                        databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
+                                addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        int calatorie = dataSnapshot.child("numarCalatorii").getValue(Integer.class);
+                                        String abonament = dataSnapshot.child("tipAbonament").getValue(String.class);
+                                        Date abonamentExpirare = dataSnapshot.child("expirareAbonament").getValue(Date.class);
+                                        if (abonament.equals("Activ")) {
+
+                                            Calendar calendar = Calendar.getInstance();
+                                            Date date = calendar.getTime();
+                                            long diff = abonamentExpirare.getTime() - date.getTime();
+
+                                            Toast.makeText(Profile.this, "Succes! Zile ramase abonament:" + TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS), Toast.LENGTH_LONG).show();
+                                        }
+                                        if (calatorie > 0 && abonament.equals("Expirat")) {
+                                            showUpdatedInfo();
+                                            UserInformation userInformation = new UserInformation(dataSnapshot.getValue(UserInformation.class));
+                                            userInformation.setNumarCalatorii(calatorie - 1);
+                                            int calatorieNew = calatorie - 1;
+                                            databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
+                                            Toast.makeText(Profile.this, "Succes! Calatorii ramase:" + calatorieNew, Toast.LENGTH_LONG).show();
+                                        } else {
+                                            if (abonament.equals("Expirat") && calatorie == 0) {
+                                                Toast.makeText(Profile.this, "Nu ai destule calatorii !", Toast.LENGTH_LONG).show();
+                                                return;
+                                            }
+                                        }
+
+
                                     }
-                                    if (calatorie > 0 && abonament == 0) {
-                                        showUpdatedInfo();
-                                        UserInformation userInformation = new UserInformation(dataSnapshot.getValue(UserInformation.class));
-                                        userInformation.setNumarCalatorii(calatorie - 1);
-                                        int calatorieNew=calatorie-1;
-                                        databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
-                                        Toast.makeText(ProfileDrawer.this, "Succes! Calatorii ramase:"+calatorieNew, Toast.LENGTH_LONG).show();
-                                    } else {
-                                        if(abonament == 0 && calatorie == 0){
-                                            Toast.makeText(ProfileDrawer.this, "Nu ai destule calatorii !", Toast.LENGTH_LONG).show();
-                                            return;}
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
                                     }
+                                });
+                    }
+                    else{
+                        Toast.makeText(Profile.this,"Codul scanat nu exista!",Toast.LENGTH_LONG).show();
+                    }
 
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-
-                                }
-                            });
                 }
                 else{
-                    Toast.makeText(ProfileDrawer.this,"Codul scanat nu exista",Toast.LENGTH_LONG).show();
+                    Toast.makeText(Profile.this,"Codul scanat nu exista!",Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -444,11 +502,6 @@ public class ProfileDrawer extends AppCompatActivity
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
-
-
-
-
-
 
 
     @Override
@@ -464,7 +517,7 @@ public class ProfileDrawer extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.profile_drawer, menu);
+        getMenuInflater().inflate(R.menu.profile, menu);
         return true;
     }
 
@@ -490,21 +543,40 @@ public class ProfileDrawer extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            scan();
 
-        } else if (id == R.id.nav_gallery) {
+            // Handle the camera action
+        } else if (id == R.id.nav_abonament) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            cumparaAbonament();
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_calatorii) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            cumparaCalatorie();
 
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_credit) {
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+            cumparaCredit();
 
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
     }
 }

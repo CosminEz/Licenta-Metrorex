@@ -1,15 +1,18 @@
 package com.example.cosmin.metrorex.Model;
 
 import java.text.NumberFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
- * Created by septy on 16.05.2017.
+ * Created by Filote Cosmin on 16.05.2017.
  */
 
 public class UserInformation {
     private String name;
     private String number;
-    private int tipAbonament;
+    private String tipAbonament;
+    private Date expirareAbonament;
     private int numarCalatorii;
     private int credit;
 
@@ -37,11 +40,11 @@ public class UserInformation {
         this.number = number;
     }
 
-    public int getTipAbonament() {
+    public String getTipAbonament() {
         return tipAbonament;
     }
 
-    public void setTipAbonament(int tipAbonament) {
+    public void setTipAbonament(String tipAbonament) {
         this.tipAbonament = tipAbonament;
     }
 
@@ -53,13 +56,24 @@ public class UserInformation {
         this.numarCalatorii = numarCalatorii;
     }
 
+    public Date getExpirareAbonament() {
+        return expirareAbonament;
+    }
 
+    public void setExpirareAbonament(Date expirareAbonament) {
+        this.expirareAbonament = expirareAbonament;
+    }
 
     public UserInformation(){
         name="null";
         number="null";
         credit=0;
-        tipAbonament=0;
+        tipAbonament="Expirat";
+
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+
+        expirareAbonament=date;
         numarCalatorii=0;
 
     }
@@ -70,6 +84,7 @@ public class UserInformation {
         this.tipAbonament = userInformation.getTipAbonament();
         this.numarCalatorii = userInformation.getNumarCalatorii();
         this.credit = userInformation.getCredit();
+        this.expirareAbonament=userInformation.getExpirareAbonament();
 
     }
 

@@ -51,7 +51,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
         if(firebaseAuth.getCurrentUser() != null){
             //the user is already logged in , start the profile activity here
             finish();
-            startActivity(new Intent(getApplicationContext(),ProfileDrawer.class));
+            startActivity(new Intent(getApplicationContext(),Profile.class));
 
 
         }
@@ -88,7 +88,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener{
                             Toast.makeText(Login.this,"Login Succesfully !",Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                             finish();
-                            startActivity(new Intent(getApplicationContext(),ProfileDrawer.class));
+                            startActivity(new Intent(getApplicationContext(),Profile.class));
                         }
                         else{
                             //error on login

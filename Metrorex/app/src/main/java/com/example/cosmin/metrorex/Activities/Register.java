@@ -122,7 +122,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
                             QRCodeWriter writer = new QRCodeWriter();
                             try {
-                                BitMatrix bitMatrix = writer.encode(user.getUid(), BarcodeFormat.QR_CODE, 512, 512);
+                                BitMatrix bitMatrix = writer.encode("MetrorexPass"+user.getUid(), BarcodeFormat.QR_CODE, 512, 512);
                                 int width = bitMatrix.getWidth();
                                 int height = bitMatrix.getHeight();
                                 Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
@@ -132,7 +132,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                     }
                                 }
 
-                                StorageReference userStorage=storageReference.child("BMP/"+firebaseAuth.getCurrentUser().getUid());
+                                StorageReference userStorage=storageReference.child("BMP/"+"MetrorexPass"+firebaseAuth.getCurrentUser().getUid());
                                 ByteArrayOutputStream bos = new ByteArrayOutputStream();
                                 bmp.compress(Bitmap.CompressFormat.PNG, 0 , bos);
                                 byte[] bitmapdata = bos.toByteArray();
