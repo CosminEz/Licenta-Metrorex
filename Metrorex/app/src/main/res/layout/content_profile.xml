@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.cosmin.metrorex.Activities.Profile"
+    tools:context="com.filote.cosmin.metrorex.Activities.Profile"
     tools:showIn="@layout/app_bar_profile">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -17,7 +17,7 @@
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        tools:context="com.example.cosmin.metrorex.Activities.Profile"
+        tools:context="com.filote.cosmin.metrorex.Activities.Profile"
         android:background="@color/global_blue_background">
 
         <RelativeLayout
@@ -79,7 +79,6 @@
                 android:layout_marginBottom="21dp"
                 android:layout_above="@+id/tvcalatorii"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/buttonScaneaza_Profile"
                 android:layout_alignEnd="@+id/tvcalatorii" />
 
 

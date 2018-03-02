@@ -8,26 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417728275465:android:6d87ec508ebaf1e3",
+        "mobilesdk_app_id": "1:417728275465:android:e3700883fbdb915c",
         "android_client_info": {
-          "package_name": "com.example.cosmin.metrorex"
+          "package_name": "com.filote.cosmin.metrorex"
         }
       },
       "oauth_client": [
         {
-          "client_id": "417728275465-6k1jvu6vl9sksp6nktiqemhnvceb6ieu.apps.googleusercontent.com",
+          "client_id": "417728275465-4o9v0o3ki4uulrc7s3bjgnj36oahrjko.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.cosmin.metrorex",
+            "package_name": "com.filote.cosmin.metrorex",
             "certificate_hash": "125bff5de5ac1899cf87cb7f25c5a5f0aaf9ffec"
-          }
-        },
-        {
-          "client_id": "417728275465-m0nnq3kifaoq1011sc84p2hgm4b09sen.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.cosmin.metrorex",
-            "certificate_hash": "6c832c595464b076eba02a57c5f4e33ed5c5defb"
           }
         },
         {

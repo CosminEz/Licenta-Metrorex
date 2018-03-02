@@ -9,7 +9,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:background="@color/global_blue_background"
-    tools:context="com.example.cosmin.metrorex.Activities.Login">
+    tools:context="com.filote.cosmin.metrorex.Activities.Login">
 
     <EditText
         android:layout_width="match_parent"

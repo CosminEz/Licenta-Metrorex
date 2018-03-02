@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.cosmin.metrorex.Activities.StartGIf">
+    tools:context="com.filote.cosmin.metrorex.Activities.StartGIf">
 
 
     <pl.droidsonroids.gif.GifImageView
