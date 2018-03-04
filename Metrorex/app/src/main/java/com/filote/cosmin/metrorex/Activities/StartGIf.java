@@ -12,6 +12,7 @@ import pl.droidsonroids.gif.GifDrawable;
 public class StartGIf extends AppCompatActivity {
 
     GifDrawable gifDrawable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +28,7 @@ public class StartGIf extends AppCompatActivity {
                 finish();
 
             }
-        },3000);
+        }, 3000);
 
     }
 

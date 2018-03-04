@@ -15,7 +15,7 @@ import java.util.List;
  * Created by Cosmin on 5/18/2017.
  */
 
-public class CalatorieAdapter extends BaseAdapter{
+public class CalatorieAdapter extends BaseAdapter {
 
     private List<Integer> mCalatorieList;
     private Context mContext;
@@ -67,7 +67,7 @@ public class CalatorieAdapter extends BaseAdapter{
         }
 
         Integer Calatorie = (Integer) getItem(currentPosition);
-        viewHolder.mCalatorieTextView.setText("Calatorii:"+Calatorie);
+        viewHolder.mCalatorieTextView.setText("Calatorii:" + Calatorie);
 
         return view;
 
@@ -78,7 +78,7 @@ public class CalatorieAdapter extends BaseAdapter{
     class ViewHolder {
         protected TextView mCalatorieTextView;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             mCalatorieTextView = (TextView) view.findViewById(R.id.tvcalatorie_adapter);
         }
     }

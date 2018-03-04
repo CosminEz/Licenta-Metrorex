@@ -15,15 +15,16 @@ import java.util.List;
  * Created by Cosmin on 6/7/2017.
  */
 
-public class AbonamentAdapter extends BaseAdapter{
+public class AbonamentAdapter extends BaseAdapter {
 
     private List<Integer> mAbonamentList;
     private Context mContext;
 
     public AbonamentAdapter(List<Integer> mAbonamentList, Context mContext) {
-        this.mAbonamentList =mAbonamentList;
+        this.mAbonamentList = mAbonamentList;
         this.mContext = mContext;
     }
+
     //get the number of the list
     @Override
     public int getCount() {
@@ -66,7 +67,7 @@ public class AbonamentAdapter extends BaseAdapter{
         }
 
         Integer Abonament = (Integer) getItem(currentPosition);
-        viewHolder.mAbonamentTextView.setText("Abonament:"+Abonament);
+        viewHolder.mAbonamentTextView.setText("Abonament:" + Abonament);
 
         return view;
 
@@ -77,7 +78,7 @@ public class AbonamentAdapter extends BaseAdapter{
     class ViewHolder {
         protected TextView mAbonamentTextView;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             mAbonamentTextView = (TextView) view.findViewById(R.id.tvabonament_adapter);
         }
     }

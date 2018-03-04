@@ -66,7 +66,7 @@ public class CreditAdapter extends BaseAdapter {
         }
 
         Integer credit = (Integer) getItem(currentPosition);
-        viewHolder.mCreditTextView.setText("Credit:"+credit);
+        viewHolder.mCreditTextView.setText("Credit:" + credit);
 
         return view;
 
@@ -77,7 +77,7 @@ public class CreditAdapter extends BaseAdapter {
     class ViewHolder {
         protected TextView mCreditTextView;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             mCreditTextView = (TextView) view.findViewById(R.id.tvcredit_adapter);
         }
     }

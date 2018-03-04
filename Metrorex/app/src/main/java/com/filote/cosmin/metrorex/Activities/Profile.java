@@ -34,12 +34,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.instacart.library.truetime.TrueTime;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -48,7 +51,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class Profile extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener,BillingProcessor.IBillingHandler {
+        implements NavigationView.OnNavigationItemSelectedListener, BillingProcessor.IBillingHandler {
     private FirebaseAuth firebaseAuth;
     private TextView textViewUserEmail;
     private Button buttonLogout;
@@ -83,8 +86,7 @@ public class Profile extends AppCompatActivity
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMenu);
         setSupportActionBar(toolbar);
-        bp = new BillingProcessor(this,null,this);
-
+        bp = new BillingProcessor(this, null, this);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -128,12 +130,11 @@ public class Profile extends AppCompatActivity
                                 textViewCalatorii.setText(textViewCalatorii.getText().toString().trim() + userInformation.getNumarCalatorii());
                                 textViewCredit.setText(textViewCredit.getText().toString().trim() + userInformation.getCredit());
                                 textViewAbonament.setText(textViewAbonament.getText().toString().trim() + userInformation.getTipAbonament());
-                                if(userInformation.getTipAbonament().equals("Activ"))
-                                {
+                                if (userInformation.getTipAbonament().equals("Activ")) {
                                     SimpleDateFormat fmtOut = new SimpleDateFormat("dd-MM-yyyy");
 
-                                    textViewAbonament.setText(textViewAbonament.getText().toString().trim()+ "\n" +
-                                    "Expira la : "+fmtOut.format(userInformation.getExpirareAbonament()));
+                                    textViewAbonament.setText(textViewAbonament.getText().toString().trim() + "\n" +
+                                            "Expira la : " + fmtOut.format(userInformation.getExpirareAbonament()));
                                 }
                             }
                         }
@@ -227,25 +228,32 @@ public class Profile extends AppCompatActivity
         listViewAbonament = (ListView) findViewById(R.id.lv_credit);
 
 
-
     }
 
-    private void checkAbonament()
-    {
+    private void checkAbonament() {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child(firebaseAuth.getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Date dataExpirareAbonament=dataSnapshot.child("expirareAbonament").getValue(Date.class);
+                    public void onDataChange(final DataSnapshot dataSnapshot) {
+                        final Date dataExpirareAbonament = dataSnapshot.child("expirareAbonament").getValue(Date.class);
 
-                        Calendar calendar = Calendar.getInstance();
-                        Date date=calendar.getTime();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    TrueTime.build().initialize();
+                                    Date date = TrueTime.now();
+                                    if (date.after(dataExpirareAbonament)) {
+                                        databaseReference.child(dataSnapshot.getKey()).child("tipAbonament").setValue("Expirat");
+                                    }
 
-                        if(date.after(dataExpirareAbonament))
-                        {
-                            databaseReference.child(dataSnapshot.getKey()).child("tipAbonament").setValue("Expirat");
-                        }
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }).start();
+
 
                     }
 
@@ -281,22 +289,17 @@ public class Profile extends AppCompatActivity
         listViewAbonament.setVisibility(View.GONE);
 
 
-
         listViewCredit.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //bp.purchase(Profile.this,listViewCredit.getItemAtPosition(position).toString());
                 bp.initialize();
-                bp.purchase(Profile.this,"android.test.purchased");
+                bp.purchase(Profile.this, "android.test.purchased");
                 bp.consumePurchase("android.test.purchased");
 
 
-
-
-
-
                 //Toast.makeText(Profile.this, "You added "+listViewCredit.getItemAtPosition(position).toString()+" credit", Toast.LENGTH_SHORT).show();
-                creditNew=(Integer)listViewCredit.getItemAtPosition(position);
+                creditNew = (Integer) listViewCredit.getItemAtPosition(position);
 
 
                 databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -328,7 +331,7 @@ public class Profile extends AppCompatActivity
 
     }
 
-    private void cumparaCalatorie(){
+    private void cumparaCalatorie() {
         listViewAbonament.setVisibility(View.GONE);
         listViewCredit.setVisibility(View.GONE);
 
@@ -336,28 +339,26 @@ public class Profile extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                //bp.purchase(Profile.this,"android.test.purchased");
 
-                calatorieNew=(Integer)listViewCalatorie.getItemAtPosition(position);
+                calatorieNew = (Integer) listViewCalatorie.getItemAtPosition(position);
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
                         addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                int calatorie=dataSnapshot.child("numarCalatorii").getValue(Integer.class);
-                                int credit=dataSnapshot.child("credit").getValue(Integer.class);
-                                int calatorieNou=calatorie+calatorieNew;
-                                int creditNou=credit - 2 * calatorieNew;
-                                if(creditNou >= 0){
+                                int calatorie = dataSnapshot.child("numarCalatorii").getValue(Integer.class);
+                                int credit = dataSnapshot.child("credit").getValue(Integer.class);
+                                int calatorieNou = calatorie + calatorieNew;
+                                int creditNou = credit - 2 * calatorieNew;
+                                if (creditNou >= 0) {
                                     showUpdatedInfo();
-                                    UserInformation userInformation=new UserInformation(dataSnapshot.getValue(UserInformation.class));
+                                    UserInformation userInformation = new UserInformation(dataSnapshot.getValue(UserInformation.class));
                                     userInformation.setCredit(creditNou);
                                     userInformation.setNumarCalatorii(calatorieNou);
                                     databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
-                                    Toast.makeText(Profile.this,"You added "+calatorieNew+" calatorii",Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(Profile.this,"You don't have enough credit",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this, "You added " + calatorieNew + " calatorii", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(Profile.this, "You don't have enough credit", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -374,17 +375,15 @@ public class Profile extends AppCompatActivity
         });
         listViewCredit.setVisibility(View.GONE);
 
-        CalatorieAdapter calatorieAdapter = new CalatorieAdapter(listCalatorie,Profile.this);
+        CalatorieAdapter calatorieAdapter = new CalatorieAdapter(listCalatorie, Profile.this);
         listViewCalatorie.setAdapter(calatorieAdapter);
         listViewCalatorie.setVisibility(View.VISIBLE);
         imageViewCloseButton.setVisibility(View.VISIBLE);
 
 
-
-
     }
 
-    private void cumparaAbonament(){
+    private void cumparaAbonament() {
         listViewCalatorie.setVisibility(View.GONE);
         listViewCredit.setVisibility(View.GONE);
 
@@ -392,47 +391,82 @@ public class Profile extends AppCompatActivity
         listViewAbonament.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                abonamentNew=(Integer)listViewAbonament.getItemAtPosition(position);
+                abonamentNew = (Integer) listViewAbonament.getItemAtPosition(position);
                 databaseReference = FirebaseDatabase.getInstance().getReference();
                 databaseReference.child(firebaseAuth.getCurrentUser().getUid())
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
+                            public void onDataChange(final DataSnapshot dataSnapshot) {
 
-                                Date dataExpirareAbonament=dataSnapshot.child("expirareAbonament").getValue(Date.class);
-                                int credit=dataSnapshot.child("credit").getValue(Integer.class);
+                                final Date dataExpirareAbonament = dataSnapshot.child("expirareAbonament").getValue(Date.class);
+                                final int credit = dataSnapshot.child("credit").getValue(Integer.class);
 
-                                Calendar calendar = Calendar.getInstance();
+                                final Calendar calendar = Calendar.getInstance();
 
-                                /** daca dataExpirare > Data Curenta Adaug n zile DataNouaExpirare dupa dataVecheExpirare
-                                altfel adaug n zile dupa data curenta
-                                rezolva cazul cand cumpar abonament la mai multe zile dupa ce mi-a expirat abonamentul */
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            TrueTime.build().initialize();
+                                            Date date = TrueTime.now();
+                                            calendar.setTime(date);
 
-                                if(dataExpirareAbonament.after(calendar.getTime())){
-                                    calendar.setTime(dataExpirareAbonament);
-                                    calendar.add(Calendar.DATE,abonamentNew);
-                                }
-                                else
-                                {
-                                    calendar.add(Calendar.DATE,abonamentNew);
 
-                                }
-                                Date dataExpirareAbonamentNou=calendar.getTime();
+                                            /** daca dataExpirare > Data Curenta Adaug n zile DataNouaExpirare dupa dataVecheExpirare
+                                             altfel adaug n zile dupa data curenta
+                                             rezolva cazul cand cumpar abonament la mai multe zile dupa ce mi-a expirat abonamentul */
 
-                                int creditNou=credit - 4 * abonamentNew;
-                                if(creditNou >= 0){
-                                    showUpdatedInfo();
-                                    UserInformation userInformation=new UserInformation(dataSnapshot.getValue(UserInformation.class));
-                                    userInformation.setCredit(creditNou);
-                                    userInformation.setTipAbonament("Activ");
-                                    userInformation.setExpirareAbonament(dataExpirareAbonamentNou);
-                                    databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
-                                    Toast.makeText(Profile.this,"You added "+abonamentNew+" zile la abonament",Toast.LENGTH_SHORT).show();
-                                }
-                                else{
-                                    Toast.makeText(Profile.this,"You don't have enough credit",Toast.LENGTH_SHORT).show();
-                                    return;
-                                }
+                                            if (dataExpirareAbonament.after(calendar.getTime())) {
+                                                calendar.setTime(dataExpirareAbonament);
+                                                calendar.add(Calendar.DATE, abonamentNew);
+                                            } else {
+                                                calendar.add(Calendar.DATE, abonamentNew);
+
+
+                                            }
+                                            Date dataExpirareAbonamentNou = calendar.getTime();
+
+                                            int creditNou = credit - 4 * abonamentNew;
+                                            if (creditNou >= 0) {
+
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        showUpdatedInfo();
+                                                    }
+                                                });
+
+                                                UserInformation userInformation = new UserInformation(dataSnapshot.getValue(UserInformation.class));
+                                                userInformation.setCredit(creditNou);
+                                                userInformation.setTipAbonament("Activ");
+                                                userInformation.setExpirareAbonament(dataExpirareAbonamentNou);
+                                                databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(Profile.this, "You added " + abonamentNew + " zile la abonament", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                            } else {
+                                                runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        Toast.makeText(Profile.this, "You don't have enough credit", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+
+                                                return;
+                                            }
+
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }).start();
+
 
                             }
 
@@ -444,7 +478,7 @@ public class Profile extends AppCompatActivity
 
             }
         });
-        AbonamentAdapter abonamentAdapter=new AbonamentAdapter(listAbonament,Profile.this);
+        AbonamentAdapter abonamentAdapter = new AbonamentAdapter(listAbonament, Profile.this);
         listViewAbonament.setAdapter(abonamentAdapter);
         listViewAbonament.setVisibility(View.VISIBLE);
         imageViewCloseButton.setVisibility(View.VISIBLE);
@@ -452,7 +486,7 @@ public class Profile extends AppCompatActivity
 
     }
 
-    public void scan(){
+    public void scan() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
         integrator.setPrompt("Scan");
@@ -463,18 +497,18 @@ public class Profile extends AppCompatActivity
         integrator.setCaptureActivity(CaptureActivityPortrait.class);
         integrator.initiateScan();
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null){
-            if(result.getContents()==null){
-                Toast.makeText(Profile.this,"Ai iesit din activitatea de scanare!",Toast.LENGTH_LONG).show();
-            }
-            else {
-                StorageReference storageReference= FirebaseStorage.getInstance().getReference();
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(Profile.this, "Ai iesit din activitatea de scanare!", Toast.LENGTH_LONG).show();
+            } else {
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-                if(storageReference.child(result.getContents().toString())!=null ) {
-                    String id=storageReference.child(result.getContents()).toString();
+                if (storageReference.child(result.getContents().toString()) != null) {
+                    String id = storageReference.child(result.getContents()).toString();
 
                     if (id.contains("MetrorexPass")) {
                         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -491,7 +525,7 @@ public class Profile extends AppCompatActivity
                                             Date date = calendar.getTime();
                                             long diff = abonamentExpirare.getTime() - date.getTime();
 
-                                            Toast.makeText(Profile.this, "Succes! Zile ramase abonament:" + TimeUnit.DAYS.convert(diff,TimeUnit.MILLISECONDS), Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Profile.this, "Succes! Zile ramase abonament:" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS), Toast.LENGTH_LONG).show();
                                         }
                                         if (calatorie > 0 && abonament.equals("Expirat")) {
                                             showUpdatedInfo();
@@ -515,19 +549,16 @@ public class Profile extends AppCompatActivity
 
                                     }
                                 });
-                    }
-                    else{
-                        Toast.makeText(Profile.this,"Codul scanat nu exista!",Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(Profile.this, "Codul scanat nu exista!", Toast.LENGTH_LONG).show();
                     }
 
-                }
-                else{
-                    Toast.makeText(Profile.this,"Codul scanat nu exista!",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(Profile.this, "Codul scanat nu exista!", Toast.LENGTH_LONG).show();
                 }
 
             }
-        }
-        else {
+        } else {
             if (!bp.handleActivityResult(requestCode, resultCode, data)) {
                 super.onActivityResult(requestCode, resultCode, data);
             }
@@ -587,7 +618,10 @@ public class Profile extends AppCompatActivity
             if (drawer.isDrawerOpen(GravityCompat.START)) {
                 drawer.closeDrawer(GravityCompat.START);
             }
+
+
             cumparaAbonament();
+
 
         } else if (id == R.id.nav_calatorii) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -614,7 +648,7 @@ public class Profile extends AppCompatActivity
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        Toast.makeText(Profile.this,"You bought "+productId,Toast.LENGTH_LONG).show();
+        Toast.makeText(Profile.this, "You bought " + productId, Toast.LENGTH_LONG).show();
 
     }
 

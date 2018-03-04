@@ -1,5 +1,8 @@
 package com.filote.cosmin.metrorex.Model;
 
+import com.instacart.library.truetime.TrueTime;
+
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,17 +66,14 @@ public class UserInformation {
         this.expirareAbonament = expirareAbonament;
     }
 
-    public UserInformation(){
-        name="null";
-        number="null";
-        credit=0;
-        tipAbonament="Expirat";
 
-        Calendar calendar = Calendar.getInstance();
-        Date date = calendar.getTime();
+    public UserInformation() {
+        name = "null";
+        number = "null";
+        credit = 0;
+        tipAbonament = "Expirat";
 
-        expirareAbonament=date;
-        numarCalatorii=0;
+        numarCalatorii = 0;
 
     }
 
@@ -83,7 +83,7 @@ public class UserInformation {
         this.tipAbonament = userInformation.getTipAbonament();
         this.numarCalatorii = userInformation.getNumarCalatorii();
         this.credit = userInformation.getCredit();
-        this.expirareAbonament=userInformation.getExpirareAbonament();
+        this.expirareAbonament = userInformation.getExpirareAbonament();
 
     }
 

@@ -63,6 +63,7 @@ dependencies {
     compile 'io.branch.sdk.android:library:2.+'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.10'
     compile 'com.anjlab.android.iab.v3:library:1.0.44'
+    compile 'com.github.instacart.truetime-android:library:3.3'
     testCompile 'junit:junit:4.12'
 }
 
