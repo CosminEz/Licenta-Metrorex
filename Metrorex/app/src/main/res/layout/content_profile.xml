@@ -27,36 +27,48 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/border"
+                android:textColor="@color/brown"
+                android:textSize="20dp"
                 android:padding="10dp"
                 android:id="@+id/tvprofile"
+                android:textStyle="bold"
 
                 android:layout_marginTop="30dp"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/red"
-                android:text="Logout"
-                android:textColor="@color/white"
-                android:id="@+id/buttonLogout"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true" />
 
 
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/aqua"
+                android:background="@drawable/border"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:text="@string/credit"
+                android:textColor="@color/black"
+                android:id="@+id/tvcredit"
+                android:layout_marginTop="21dp"
+                android:layout_below="@+id/tvprofile"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="5dp"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/border"
                 android:text="Numar Calatorii:"
                 android:id="@+id/tvcalatorii"
                 android:padding="10dp"
-                android:layout_marginBottom="19dp"
-                android:layout_above="@+id/tvabonament"
-                android:layout_alignParentStart="true" />
+                android:layout_marginTop="21dp"
+                android:layout_below="@+id/tvprofile"
+                android:textColor="@color/black"
+                android:layout_marginLeft="100dp"
+
+                 />
 
 
             <TextView
@@ -65,21 +77,15 @@
                 android:layout_height="wrap_content"
                 android:text="@string/tipabonament"
                 android:padding="10dp"
-                android:background="@color/aqua"
+                android:background="@drawable/border"
                 android:layout_centerVertical="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/tvcalatorii" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@color/aqua"
-                android:padding="10dp"
-                android:text="@string/credit"
-                android:id="@+id/tvcredit"
-                android:layout_marginBottom="21dp"
-                android:layout_above="@+id/tvcalatorii"
-                android:layout_alignParentStart="true"
-                android:layout_alignEnd="@+id/tvcalatorii" />
+                android:layout_below="@id/tvprofile"
+                android:layout_marginLeft="232dp"
+                android:layout_marginTop="21dp"
+                android:textColor="@color/black"
+
+                 />
+
 
 
 

@@ -20,4 +20,7 @@
     <color name="navy">#000080</color>
     <color name="black">#000000</color>
     <color name="global_blue_background">#c0d3e3</color>
+    <color name="mustard">#e5cb6f</color>
+    <color name="orange">#EF6C00</color>
+    <color name="brown">#6D4C41</color>
 </resources>

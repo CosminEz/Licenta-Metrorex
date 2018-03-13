@@ -4,20 +4,25 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
+            android:icon="@drawable/ic_camera_enhance_black_24dp"
             android:title="Scaneaza" />
         <item
             android:id="@+id/nav_credit"
-            android:icon="@drawable/cartela"
+            android:icon="@drawable/ic_credit_card_black_24dp"
             android:title="Credit" />
         <item
             android:id="@+id/nav_calatorii"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
             android:title="Calatorii" />
         <item
             android:id="@+id/nav_abonament"
-            android:icon="@drawable/ic_menu_manage"
+            android:icon="@drawable/icons8_renew_48"
             android:title="Abonament" />
+        <item
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_power_settings_new_black_24dp"
+            android:title="Logout"
+            />
     </group>
 
 </menu>

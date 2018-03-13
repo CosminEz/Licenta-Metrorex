@@ -3,8 +3,8 @@
     <string name="Username">Username</string>
     <string name="username_hint">Username</string>
     <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="create">Register User</string>
+    <string name="login">   Login   </string>
+    <string name="register_user">   Register   </string>
     <string name="singing">Already registered? Sign in here.</string>
     <string name="tvlogin">Don\'t have an account yet ? Register here.</string>
     <string name="tipabonament">Abonament:</string>

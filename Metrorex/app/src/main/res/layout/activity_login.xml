@@ -39,10 +39,11 @@
         android:layout_height="wrap_content"
         android:text="@string/login"
         android:id="@+id/buttonLogin"
-        android:background="@color/white"
-        android:layout_marginTop="37dp"
+        android:background="@drawable/border"
+        android:layout_marginTop="40dp"
         android:layout_below="@+id/etpasswordlogin"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        />
 
     <EditText
         android:layout_width="match_parent"
@@ -62,7 +63,7 @@
         android:text="@string/tvlogin"
         android:layout_below="@+id/buttonLogin"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/tvlogin"
         android:textColor="@color/black"/>
 
@@ -76,7 +77,7 @@
         android:textStyle="bold"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="41dp" />
+        android:layout_marginTop="37dp" />
 
     <TextView
         android:id="@+id/username"

@@ -13,7 +13,7 @@
 
 
     <TextView
-        android:text="User Login"
+        android:text="User Register"
         android:textColor="@color/black"
         android:textSize="40dp"
         android:layout_width="wrap_content"
@@ -79,12 +79,12 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/create"
+        android:text="@string/register_user"
         android:id="@+id/buttonRegister"
         android:layout_below="@+id/etpassword"
         android:layout_toEndOf="@+id/tvpassword"
         android:layout_marginTop="46dp"
-        android:background="@color/white"
+        android:background="@drawable/border"
         android:padding="10dp"/>
 
     <TextView
@@ -93,7 +93,7 @@
         android:text="@string/singing"
         android:layout_below="@+id/buttonRegister"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
+        android:layout_marginTop="50dp"
         android:id="@+id/tvsignin"
         android:textColor="@color/black"
         android:textAlignment="center" />

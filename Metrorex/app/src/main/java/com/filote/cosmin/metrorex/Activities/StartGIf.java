@@ -24,7 +24,7 @@ public class StartGIf extends AppCompatActivity {
 
                 //aici animatie sau ceva
 
-                startActivity(new Intent(StartGIf.this, Register.class));
+                startActivity(new Intent(StartGIf.this, Login.class));
                 finish();
 
             }

@@ -149,16 +149,9 @@ public class Profile extends AppCompatActivity
                 });
 
 
-        buttonLogout = (Button) findViewById(R.id.buttonLogout);
 
-        buttonLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                firebaseAuth.signOut();
-                finish();
-                startActivity(new Intent(Profile.this, Login.class));
-            }
-        });
+
+
 
 //        buttonCumparaCredit.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -518,14 +511,35 @@ public class Profile extends AppCompatActivity
                                     public void onDataChange(DataSnapshot dataSnapshot) {
                                         int calatorie = dataSnapshot.child("numarCalatorii").getValue(Integer.class);
                                         String abonament = dataSnapshot.child("tipAbonament").getValue(String.class);
-                                        Date abonamentExpirare = dataSnapshot.child("expirareAbonament").getValue(Date.class);
+                                        final Date abonamentExpirare = dataSnapshot.child("expirareAbonament").getValue(Date.class);
                                         if (abonament.equals("Activ")) {
 
-                                            Calendar calendar = Calendar.getInstance();
-                                            Date date = calendar.getTime();
-                                            long diff = abonamentExpirare.getTime() - date.getTime();
 
-                                            Toast.makeText(Profile.this, "Succes! Zile ramase abonament:" + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS), Toast.LENGTH_LONG).show();
+
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    try {
+                                                        TrueTime.build().initialize();
+                                                        Date date = TrueTime.now();
+                                                        final long diff = abonamentExpirare.getTime() - date.getTime();
+                                                        runOnUiThread(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                Toast.makeText(Profile.this, "Succes! Zile ramase din abonament:" + (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) +1) , Toast.LENGTH_LONG).show();
+
+                                                            }
+                                                        });
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+
+
+                                                }
+                                            }).start();
+
+
+
                                         }
                                         if (calatorie > 0 && abonament.equals("Expirat")) {
                                             showUpdatedInfo();
@@ -637,7 +651,18 @@ public class Profile extends AppCompatActivity
             }
             cumparaCredit();
 
+        } else if (id == R.id.nav_logout){
+
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            if (drawer.isDrawerOpen(GravityCompat.START)) {
+                drawer.closeDrawer(GravityCompat.START);
+            }
+
+            firebaseAuth.signOut();
+            finish();
+            startActivity(new Intent(Profile.this, Login.class));
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
