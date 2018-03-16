@@ -1,28 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.filote.cosmin.metrorex">
+    package="com.filote.cosmin1.metrorex">
+
+    <uses-permission android:name="com.android.vending.BILLING" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
+        android:icon="@drawable/metrorex_sigla"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:icon="@drawable/metrorex_sigla">
+        android:theme="@style/AppTheme">
+
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+
         <activity
-            android:name=".Activities.Register"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+
         <activity
-            android:name=".Activities.Login"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".Activities.CaptureActivityPortrait"
+            android:name="com.filote.cosmin1.metrorex.Activities.CaptureActivityPortrait"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
-
         <activity
-            android:name=".Activities.StartGIf"
+            android:name="com.filote.cosmin1.metrorex.Activities.StartGIf"
             android:label="@string/title_activity_start_gif"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -32,11 +45,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.Profile"
+            android:name="com.filote.cosmin1.metrorex.Activities.Profile"
             android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.filote.cosmin1.metrorex.Activities.LoginRegister"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
+
     </application>
-    <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

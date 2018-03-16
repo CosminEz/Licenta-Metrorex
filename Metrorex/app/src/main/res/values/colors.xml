@@ -23,4 +23,5 @@
     <color name="mustard">#e5cb6f</color>
     <color name="orange">#EF6C00</color>
     <color name="brown">#6D4C41</color>
+    <item name="errorColor" type="color">#ee5d2c</item>
 </resources>

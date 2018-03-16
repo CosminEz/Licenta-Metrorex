@@ -8,17 +8,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:417728275465:android:e3700883fbdb915c",
+        "mobilesdk_app_id": "1:417728275465:android:22fb6c5d11dcf7bc",
         "android_client_info": {
-          "package_name": "com.filote.cosmin.metrorex"
+          "package_name": "com.filote.cosmin1.metrorex"
         }
       },
       "oauth_client": [
         {
-          "client_id": "417728275465-4o9v0o3ki4uulrc7s3bjgnj36oahrjko.apps.googleusercontent.com",
+          "client_id": "417728275465-crl49bh7kg65kfsrs40crd6tk73unoom.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.filote.cosmin.metrorex",
+            "package_name": "com.filote.cosmin1.metrorex",
             "certificate_hash": "125bff5de5ac1899cf87cb7f25c5a5f0aaf9ffec"
           }
         },
