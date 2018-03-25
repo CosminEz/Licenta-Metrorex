@@ -11,31 +11,59 @@
 
     <ImageView
         android:id="@+id/iv_logo"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
         android:layout_centerVertical="true"
         android:scaleType="centerCrop"
-        android:src="@drawable/comoara"
-        android:layout_marginLeft="20dp"/>
+        android:src="@drawable/fundal_metrou"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_toRightOf="@+id/iv_logo"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tvcredit_adapter"
-            android:text="Cumpara credit:"
-            android:padding="10dp"
-            android:textColor="@color/black"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/aqua"/>
+        android:orientation="vertical"
+        android:id="@+id/linearLayout">
 
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvcredit_adapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="Cumpara credit:"
+        android:textColor="@color/white"
+        android:layout_marginTop="70dp"
+        android:layout_marginStart="23dp"
+        android:layout_alignTop="@+id/linearLayout"
+        android:layout_alignStart="@+id/iv_logo"
+        android:textSize="50px"/>
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="@string/cumpara_bilet_sau_abonament"
+        android:textColor="@color/white"
+        android:layout_marginTop="110dp"
+        android:layout_marginLeft="55dp"
+
+
+            />
+
+    <TextView
+        android:id="@+id/tvcreit_pret_adapter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="120 Lei"
+        android:textColor="@color/white"
+        android:layout_alignParentTop="true"
+        android:layout_alignEnd="@+id/iv_logo"
+        android:layout_marginEnd="15dp"
+        android:layout_marginTop="11dp"
+        android:textSize="120px"/>
 
 </RelativeLayout>

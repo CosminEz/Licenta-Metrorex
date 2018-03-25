@@ -4,6 +4,7 @@ import java.util.Date;
 
 /**
  * Created by Filote Cosmin on 16.05.2017.
+ * This class is a POJO .
  */
 
 public class UserInformation {

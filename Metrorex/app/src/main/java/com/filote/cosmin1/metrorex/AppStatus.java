@@ -23,6 +23,8 @@ public class AppStatus {
         return instance;
     }
 
+
+    /** With this method i check if the user has acces to Internet or not */
     public boolean isOnline() {
         try {
             connectivityManager = (ConnectivityManager) context

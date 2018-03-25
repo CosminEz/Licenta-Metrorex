@@ -61,7 +61,7 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
 
     private OnAddFragment mOnAddFragment;
 
-
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
 
     @Override
@@ -82,9 +82,7 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
         editTextPassword = (EditText) view.findViewById(R.id.etpassword);
 
 
-
         buttonRegister.setOnClickListener(this);
-
 
 
         return view;
@@ -111,9 +109,6 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
     }
 
 
-    // displayErrorOnUI
-    // use this if you are on another thread
-    //
     private void displayErrorOnUI(final String errorMessage) {
         getActivity().runOnUiThread(new Runnable() {
             @Override
@@ -123,9 +118,13 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
         });
     }
 
-    //
-    //  displayError
-    //
+
+    /**
+     * method for displaying errors in a TextView.
+     *
+     * @param errorMessage is used to show the error
+     */
+
     public void displayError(String errorMessage) {
         final TextView errorTextView = (TextView) getView().findViewById(R.id.errorTextView);
         errorTextView.setText(errorMessage);
@@ -143,9 +142,9 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
         }.start();
     }
 
-    //
-    //
-    //
+    /**
+     * @param email checks if email is valid
+     */
     private boolean isValidEmail(String email) {
         if (email == null) {
             return false;
@@ -159,10 +158,12 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
     }
 
 
-    //
-    //  checks the provided data
-    //  if data is consistent, registers the user
-    //
+    /**
+     * With this method the user is registered .
+     * Checks for the email and password to be correct ( not empty and valid)
+     * With the firebase it registers the user and creates a qr-code that will be stored in FirebaseStorage.
+     * It will also send a verification mail .
+     */
 
 
     private void registerUser() {
@@ -219,19 +220,6 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
                             progressDialog.dismiss();
                             final UserInformation userInformation = new UserInformation();
 
-                            /*new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        TrueTime.build().initialize();
-                                        userInformation.setExpirareAbonament(TrueTime.now());
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-
-                                }
-                            }).start();*/
-
                             Calendar cal = Calendar.getInstance();
                             userInformation.setExpirareAbonament(cal.getTime());
 
@@ -256,26 +244,15 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
                                 byte[] bitmapdata = bos.toByteArray();
 
                                 UploadTask uploadTask = userStorage.putBytes(bitmapdata);
-                                /*uploadTask.addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        e.printStackTrace();
-                                        Toast.makeText(Register.this, "Upload failed for bmp", Toast.LENGTH_SHORT).show();
-
-                                    }
-                                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                        Toast.makeText(Register.this, "Upload succes for bmp", Toast.LENGTH_SHORT).show();
-                                    }
-                                });*/
-
 
                             } catch (WriterException e) {
                                 e.printStackTrace();
                             }
 
-                            mOnChangeActivity.changeActivity(Profile.class);
+
+                            sendVerificationMail();
+
+
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), "Could not register, please try again .", Toast.LENGTH_SHORT).show();
                         }
@@ -283,8 +260,31 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
                     }
                 });
 
+
     }
 
+    /**
+     * this method sends a verification mail with Firebase
+     */
+
+    protected void sendVerificationMail() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        user.sendEmailVerification()
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseAuth.getInstance().signOut();
+                            Toast.makeText(getActivity().getApplicationContext(), "Email sent,please verify your mail!", Toast.LENGTH_LONG).show();
+
+
+                        } else {
+
+                        }
+
+                    }
+                });
+    }
 
 
     @Override
@@ -296,7 +296,6 @@ public class RegisterFragment extends LoginRegisterFragmentBase implements View.
             } else
                 displayError("You have to connect to the internet to be able to log in!");
         }
-
 
 
     }

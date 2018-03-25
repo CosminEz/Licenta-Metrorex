@@ -40,20 +40,7 @@ public class LoginRegister extends AppCompatActivity implements OnAddFragment, O
                 .addToBackStack("login")
                 .commit();
 
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "com.example.packagename",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
 
-        } catch (NoSuchAlgorithmException e) {
-
-        }
 
 
 
@@ -64,6 +51,9 @@ public class LoginRegister extends AppCompatActivity implements OnAddFragment, O
         super.onStart();
     }
 
+    /**
+     * method to start the register fragment with animation
+     */
     private void startRegister() {
         RegisterFragment registerFragment = new RegisterFragment();
         registerFragment.setOnChangeActivity(this);

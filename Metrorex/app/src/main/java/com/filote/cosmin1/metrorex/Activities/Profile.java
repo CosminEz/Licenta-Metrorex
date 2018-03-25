@@ -75,7 +75,6 @@ public class Profile extends AppCompatActivity
     private ImageView imageViewCloseButton;
     private Button buttonCalatorie;
     private Button buttonAbonament;
-    private int creditNew;
     private int calatorieNew;
     private int abonamentNew;
     private ActionBarDrawerToggle toggle;
@@ -87,6 +86,7 @@ public class Profile extends AppCompatActivity
         setContentView(R.layout.activity_profile);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarMenu);
         setSupportActionBar(toolbar);
+        /** facebook and billingProcessor initializers*/
         bp = new BillingProcessor(this, null, this);
 
         FacebookSdk.sdkInitialize(this);
@@ -105,6 +105,7 @@ public class Profile extends AppCompatActivity
 
         if (firebaseAuth.getCurrentUser() == null) {
             //user not logged in
+
             startActivity(new Intent(this, LoginRegister.class));
         }
 
@@ -114,13 +115,13 @@ public class Profile extends AppCompatActivity
         textViewCredit = (TextView) findViewById(R.id.tvcredit);
         textViewAbonament = (TextView) findViewById(R.id.tvabonament);
 
-        imageViewCloseButton = (ImageView) findViewById(R.id.im_close_button);
-
 
         textViewUserEmail = (TextView) findViewById(R.id.tvprofile);
         textViewUserEmail.setText("Welcome " + firebaseAuth.getCurrentUser().getEmail().toString().trim() + " !");
 
-        //checkAbonament();
+        /** In OnCreate it checks the database and corrects the data in the database.
+         * It also gathers the data about the user and show it in app*/
+        checkAbonament();
 
 
         databaseReference.
@@ -151,56 +152,14 @@ public class Profile extends AppCompatActivity
                     }
                 });
 
-
-
-
-
-
-//        buttonCumparaCredit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                cumparaCredit();
-//            }
-//        });
-//        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                listViewCredit.setVisibility(View.GONE);
-//                listViewCalatorie.setVisibility(View.GONE);
-//                listViewAbonament.setVisibility(View.GONE);
-//                imageViewCloseButton.setVisibility(View.GONE);
-//            }
-//        });
-//        buttonCalatorie.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                cumparaCalatorie();
-//            }
-//        });
-//        buttonAbonament.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                cumparaAbonament();
-//            }
-//        });
-        imageViewCloseButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                listViewCalatorie.setVisibility(View.GONE);
-                imageViewCloseButton.setVisibility(View.GONE);
-            }
-        });
+        /** lists for Credit,Calatorie and Abonament */
 
         listCredit = new ArrayList<>();
-        listCredit.add(1);
         listCredit.add(5);
         listCredit.add(10);
         listCredit.add(20);
+        listCredit.add(40);
         listCredit.add(100);
-        listCredit.add(200);
-        listCredit.add(500);
-        listCredit.add(1000);
 
 
         listCalatorie = new ArrayList<>();
@@ -228,6 +187,10 @@ public class Profile extends AppCompatActivity
 
     }
 
+    /**
+     * checks if the abonament is still valid.It gets the correct time from TruTime.I used an api for this.
+     */
+
     private void checkAbonament() {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child(firebaseAuth.getCurrentUser().getUid())
@@ -235,22 +198,23 @@ public class Profile extends AppCompatActivity
                     @Override
                     public void onDataChange(final DataSnapshot dataSnapshot) {
                         final Date dataExpirareAbonament = dataSnapshot.child("expirareAbonament").getValue(Date.class);
+                        if (dataExpirareAbonament != null) {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        TrueTime.build().initialize();
+                                        Date date = TrueTime.now();
+                                        if (date.after(dataExpirareAbonament)) {
+                                            databaseReference.child(dataSnapshot.getKey()).child("tipAbonament").setValue("Expirat");
+                                        }
 
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    TrueTime.build().initialize();
-                                    Date date = TrueTime.now();
-                                    if (date.after(dataExpirareAbonament)) {
-                                        databaseReference.child(dataSnapshot.getKey()).child("tipAbonament").setValue("Expirat");
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
-                            }
-                        }).start();
+                            }).start();
+                        }
 
 
                     }
@@ -263,6 +227,12 @@ public class Profile extends AppCompatActivity
 
     }
 
+    /**
+     * show the data from database correct .Without this method the output will look like :
+     * Calatorie: 34 if we had 3 calatori and added one more.Corect output should be 4.
+     */
+
+
     private void showUpdatedInfo() {
         String S = textViewCredit.getText().toString().replaceAll("[0-9]+", "");
         textViewCredit.setText(S);
@@ -272,15 +242,11 @@ public class Profile extends AppCompatActivity
         textViewAbonament.setText("Abonament:");
     }
 
-    private void saveUserInformation() {
-        String name = nameText.getText().toString().trim();
-        String number = numberText.getText().toString().trim();
-
-        UserInformation userInformation = new UserInformation(name, number);
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        databaseReference.child(user.getUid()).setValue(userInformation);
-        Toast.makeText(this, "Informatia a fost salvata !", Toast.LENGTH_LONG).show();
-    }
+    /**
+     * This method is used to buy Credit .When CumparaCredit is pressed a listView with credits is shown.
+     * With the setOnItemClickListener if we press an item it will initialize the billingProcessor and
+     * purchase the credit.
+     */
 
     private void cumparaCredit() {
         listViewCalatorie.setVisibility(View.GONE);
@@ -291,31 +257,13 @@ public class Profile extends AppCompatActivity
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //bp.purchase(Profile.this,listViewCredit.getItemAtPosition(position).toString());
-                bp.initialize();
-                bp.purchase(Profile.this, "credit_5");
-                bp.consumePurchase("credit_5");
 
 
                 //Toast.makeText(Profile.this, "You added "+listViewCredit.getItemAtPosition(position).toString()+" credit", Toast.LENGTH_SHORT).show();
-                creditNew = (Integer) listViewCredit.getItemAtPosition(position);
-
-
-                databaseReference = FirebaseDatabase.getInstance().getReference();
-                databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
-                        addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                int credit = dataSnapshot.child("credit").getValue(Integer.class);
-                                int creditNou = credit + creditNew;
-                                databaseReference.child(dataSnapshot.getKey()).child("credit").setValue(creditNou);
-                                showUpdatedInfo();
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
+                int creditNew = (Integer) listViewCredit.getItemAtPosition(position);
+                bp.initialize();
+                bp.purchase(Profile.this, "credit_" + creditNew);
+                bp.consumePurchase("credit_" + creditNew);
 
 
             }
@@ -325,9 +273,13 @@ public class Profile extends AppCompatActivity
         CreditAdapter creditAdapter = new CreditAdapter(listCredit, Profile.this);
         listViewCredit.setAdapter(creditAdapter);
         listViewCredit.setVisibility(View.VISIBLE);
-        imageViewCloseButton.setVisibility(View.VISIBLE);
+
 
     }
+
+    /**
+     * This method is used to buy journeys. If we have enough credits we can buy the amount we desire.
+     */
 
     private void cumparaCalatorie() {
         listViewAbonament.setVisibility(View.GONE);
@@ -376,10 +328,13 @@ public class Profile extends AppCompatActivity
         CalatorieAdapter calatorieAdapter = new CalatorieAdapter(listCalatorie, Profile.this);
         listViewCalatorie.setAdapter(calatorieAdapter);
         listViewCalatorie.setVisibility(View.VISIBLE);
-        imageViewCloseButton.setVisibility(View.VISIBLE);
 
 
     }
+
+    /**
+     * This method is used to buy subscriptions. If we have enough credits we can buy the amount we desire.
+     */
 
     private void cumparaAbonament() {
         listViewCalatorie.setVisibility(View.GONE);
@@ -479,11 +434,13 @@ public class Profile extends AppCompatActivity
         AbonamentAdapter abonamentAdapter = new AbonamentAdapter(listAbonament, Profile.this);
         listViewAbonament.setAdapter(abonamentAdapter);
         listViewAbonament.setVisibility(View.VISIBLE);
-        imageViewCloseButton.setVisibility(View.VISIBLE);
 
 
     }
 
+    /**
+     * This method is used to scan the qr-code.
+     */
     public void scan() {
         IntentIntegrator integrator = new IntentIntegrator(this);
         integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
@@ -520,7 +477,6 @@ public class Profile extends AppCompatActivity
                                         if (abonament.equals("Activ")) {
 
 
-
                                             new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
@@ -531,7 +487,7 @@ public class Profile extends AppCompatActivity
                                                         runOnUiThread(new Runnable() {
                                                             @Override
                                                             public void run() {
-                                                                Toast.makeText(Profile.this, "Succes! Zile ramase din abonament:" + (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) +1) , Toast.LENGTH_LONG).show();
+                                                                Toast.makeText(Profile.this, "Succes! Zile ramase din abonament:" + (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1), Toast.LENGTH_LONG).show();
 
                                                             }
                                                         });
@@ -542,7 +498,6 @@ public class Profile extends AppCompatActivity
 
                                                 }
                                             }).start();
-
 
 
                                         }
@@ -592,8 +547,18 @@ public class Profile extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if ((listViewCredit.getVisibility() == View.VISIBLE) || (listViewAbonament.getVisibility() == View.VISIBLE) || (listViewCalatorie.getVisibility() == View.VISIBLE)) {
+                listViewCalatorie.setVisibility(View.GONE);
+                listViewAbonament.setVisibility(View.GONE);
+                listViewCredit.setVisibility(View.GONE);
+
+            } else {
+                super.onBackPressed();
+            }
+
+
         }
+
     }
 
     @Override
@@ -656,7 +621,7 @@ public class Profile extends AppCompatActivity
             }
             cumparaCredit();
 
-        } else if (id == R.id.nav_logout){
+        } else if (id == R.id.nav_logout) {
 
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -679,7 +644,25 @@ public class Profile extends AppCompatActivity
 
     @Override
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
-        Toast.makeText(Profile.this, "You bought " + productId, Toast.LENGTH_LONG).show();
+
+        final int creditNew = Integer.parseInt(productId.toString().substring(7));
+
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        int credit = dataSnapshot.child("credit").getValue(Integer.class);
+                        int creditNou = credit + creditNew;
+                        databaseReference.child(dataSnapshot.getKey()).child("credit").setValue(creditNou);
+                        showUpdatedInfo();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
     }
 

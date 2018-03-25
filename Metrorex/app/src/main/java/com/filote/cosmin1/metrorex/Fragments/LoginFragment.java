@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -31,7 +32,9 @@ import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.filote.cosmin1.metrorex.Activities.LoginRegister;
 import com.filote.cosmin1.metrorex.Activities.Profile;
+import com.filote.cosmin1.metrorex.Activities.StartGIf;
 import com.filote.cosmin1.metrorex.AppStatus;
 import com.filote.cosmin1.metrorex.Interfaces.OnAddFragment;
 import com.filote.cosmin1.metrorex.Model.UserInformation;
@@ -124,6 +127,8 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        /** if the user is logged in start the Profile Activity , also check if Internet is available*/
+
         if (firebaseAuth.getCurrentUser() != null) {
             //the user is already logged in , start the profile activity here
 
@@ -135,6 +140,9 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
 
 
         }
+
+        /** facebook.sdk initializers */
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(getActivity());
 
@@ -144,13 +152,13 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
 
         LoginManager.getInstance().logOut();
 
+        /** callback for facebook,if succesfull then calls handleFacebookAccesToken else the user is logged out */
+
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         handleFacebookAccesToken(loginResult.getAccessToken());
-
-
                     }
 
                     @Override
@@ -191,6 +199,11 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
 
     }
 
+    /**
+     * method to handle the login with Facebook ,creates node in database with UID and signInWithCredential
+     *
+     * @param token
+     */
     private void handleFacebookAccesToken(AccessToken token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
@@ -280,6 +293,12 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
     // displayError
     // displays the error in the textview from the botton of the page
     //
+
+    /**
+     * method for displaying errors in a TextView.
+     *
+     * @param errorMessage is used to show the error
+     */
     public void displayError(String errorMessage) {
         if (progressDialog.isShowing())
             progressDialog.dismiss();
@@ -302,6 +321,9 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
     }
 
 
+    /**
+     * @param email checks if email is valid
+     */
     private boolean isValidEmail(String email) {
         if (email == null) {
             return false;
@@ -314,10 +336,13 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
         return !TextUtils.isEmpty(password);
     }
 
-    //
-    //  checks if name and password are correct
-    //  authenticates the user
-    //
+
+    /**
+     * With this method the user is logged in .
+     * Checks for the email and password to be correct ( not empty and valid)
+     * With the firebase it loggs in the user and then redirects to Profile activity
+     */
+
     private void userLogin() {
         String email = editTextMailLogin.getText().toString().trim();
         String password = editTextPasswordLogin.getText().toString().trim();
@@ -366,11 +391,20 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            //start the profile activity
-                            Toast.makeText(getActivity().getApplicationContext(), "Login Succesfully !", Toast.LENGTH_SHORT).show();
+                            //check if email is verrified and then start the profile activity
+
+                            if (FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()) {
+                                Toast.makeText(getActivity().getApplicationContext(), "Email is verified", Toast.LENGTH_LONG).show();
+
+                                getActivity().finish();
+                                startActivity(new Intent(getActivity().getApplicationContext(), Profile.class));
+                            } else {
+                                FirebaseAuth.getInstance().signOut();
+                                Toast.makeText(getActivity().getApplicationContext(), "Email is not verified", Toast.LENGTH_LONG).show();
+
+                            }
                             progressDialog.dismiss();
-                            getActivity().finish();
-                            startActivity(new Intent(getActivity().getApplicationContext(), Profile.class));
+
                         } else {
                             //error on login
                             Toast.makeText(getActivity().getApplicationContext(), "Login Unsuccesfully, please try again", Toast.LENGTH_SHORT).show();

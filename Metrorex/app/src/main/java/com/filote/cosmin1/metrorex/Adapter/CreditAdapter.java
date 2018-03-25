@@ -66,7 +66,10 @@ public class CreditAdapter extends BaseAdapter {
         }
 
         Integer credit = (Integer) getItem(currentPosition);
-        viewHolder.mCreditTextView.setText("Credit:" + credit);
+        viewHolder.mCreditTextView.setText(credit + " Credite");
+        float pret = (float)19/100 * credit + credit;
+        viewHolder.mCreditPretTextView.setText(pret+" Lei");
+
 
         return view;
 
@@ -76,9 +79,11 @@ public class CreditAdapter extends BaseAdapter {
 
     class ViewHolder {
         protected TextView mCreditTextView;
+        protected TextView mCreditPretTextView;
 
         public ViewHolder(View view) {
             mCreditTextView = (TextView) view.findViewById(R.id.tvcredit_adapter);
+            mCreditPretTextView = (TextView)view.findViewById(R.id.tvcreit_pret_adapter);
         }
     }
 
