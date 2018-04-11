@@ -7,8 +7,8 @@ android {
         applicationId "com.filote.cosmin1.metrorex"
         minSdkVersion 21
         targetSdkVersion 21
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -70,6 +70,7 @@ dependencies {
     compile 'com.facebook.android:facebook-android-sdk:4.27.0'
     testCompile 'junit:junit:4.12'
 }
+
 
 
 

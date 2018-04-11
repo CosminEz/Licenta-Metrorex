@@ -9,22 +9,64 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/global_blue_background"
-    tools:context="com.filote.cosmin1.metrorex.Activities.Login">
+    android:background="@drawable/water_login"
+    tools:context="com.filote.cosmin1.metrorex.Activities.LoginRegister">
 
+    <TextView
+        android:id="@+id/username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/Username"
+        android:textColor="@color/white"
+        android:layout_marginLeft="25dp"
+        android:textSize="15dp"
+        android:layout_marginTop="19dp"
+        android:layout_alignParentTop="true"
+
+         />
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:hint="@string/username_hint"
         android:inputType="textEmailAddress"
-        android:layout_alignBaseline="@+id/username"
-        android:layout_alignBottom="@+id/username"
-        android:layout_toEndOf="@+id/username"
-        android:layout_marginStart="43dp"
         android:id="@+id/etusernamelogin"
-        android:background="@drawable/border"
-        android:padding="10dp"/>
+        android:padding="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/username"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white"
+        android:layout_alignParentStart="true"
+        android:backgroundTint="@color/white"
+        android:textSize="30sp"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/password"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:layout_marginLeft="25dp"
+        android:id="@+id/tvpassword"
+        android:layout_marginTop="35dp"
+        android:layout_below="@+id/etusernamelogin" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/password"
+        android:textColorHint="@color/white"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
+        android:padding="5dp"
+        android:id="@+id/etpasswordlogin"
+        android:inputType="textPassword"
+        android:layout_marginTop="5dp"
+        android:layout_below="@+id/tvpassword"
+        android:textSize="30sp"
+        android:layout_alignStart="@+id/etusernamelogin" />
 
 
     <ImageView
@@ -32,7 +74,7 @@
         android:layout_height="120dp"
         android:src="@drawable/metrorex_sigla"
         android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
+        android:layout_above="@+id/LoginFacebookBtn"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -58,63 +100,22 @@
         facebook:paddingEnd="20dp"
         />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/password"
-        android:background="@drawable/border"
-        android:padding="10dp"
-        android:id="@+id/etpasswordlogin"
-        android:inputType="textPassword"
-        android:layout_alignBaseline="@+id/tvpassword"
-        android:layout_alignBottom="@+id/tvpassword"
-        android:layout_alignStart="@+id/etusernamelogin" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tvlogin"
         android:id="@+id/tvlogin"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_alignBaseline="@+id/errorTextView"
         android:layout_alignBottom="@+id/errorTextView"
         android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:text="User Login"
-        android:textColor="@color/black"
-        android:textSize="40dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:textStyle="bold"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/imageView"
-        android:layout_centerHorizontal="true" />
 
-    <TextView
-        android:id="@+id/username"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/Username"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:layout_marginLeft="20dp"
-        android:textSize="20dp"
-        android:layout_marginTop="18dp"
-        android:layout_below="@+id/textView"
-        android:layout_toStartOf="@+id/imageView"
-        android:layout_alignEnd="@+id/tvpassword" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password"
-        android:textColor="@color/common_google_signin_btn_text_dark_focused"
-        android:textSize="20dp"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/tvpassword"
-        android:layout_marginTop="35dp"
-        android:layout_below="@+id/etusernamelogin" />
+
+
+
 
     <TextView
         android:id="@+id/errorTextView"

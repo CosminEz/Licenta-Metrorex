@@ -19,6 +19,11 @@
             android:icon="@drawable/icons8_renew_48"
             android:title="Abonament" />
         <item
+            android:id="@+id/nav_edit_profile"
+            android:icon="@drawable/edit_profile"
+            android:title="Editeaza profilul"
+            />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/ic_power_settings_new_black_24dp"
             android:title="Logout"
