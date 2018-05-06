@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.filote.cosmin1.metrorex.com.filote.cosmin_catalin.metrorex.Activities.Profile"
+    tools:context="com.filote.cosmin1.metrorex.Activities.Profile"
     tools:showIn="@layout/app_bar_profile">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -20,9 +20,16 @@
         tools:context="com.filote.cosmin1.metrorex.com.filote.cosmin_catalin.metrorex.Activities.Profile"
         android:background="@color/global_blue_background">
 
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/swipe_refresh">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -40,13 +47,12 @@
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:paddingLeft="70dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:text="@string/credit"
                 android:textColor="@color/black"
                 android:id="@+id/tvcredit"
@@ -55,44 +61,71 @@
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="5dp"
                 />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/dollar"
+                android:layout_alignBottom="@+id/tvcredit"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"/>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/border"
                 android:text="Numar Calatorii:"
                 android:id="@+id/tvcalatorii"
-                android:padding="10dp"
+                android:paddingLeft="70dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:layout_marginTop="21dp"
-                android:layout_below="@+id/tvprofile"
+                android:layout_below="@+id/tvcredit"
                 android:textColor="@color/black"
-                android:layout_marginLeft="100dp"
-
+                android:layout_marginLeft="5dp"
                  />
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/seoul_metro_logo"
+                android:layout_alignBottom="@+id/tvcalatorii"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="20dp"/>
+
 
 
             <TextView
                 android:id="@+id/tvabonament"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/tipabonament"
-                android:padding="10dp"
+                android:paddingLeft="70dp"
+                android:paddingTop="20dp"
+                android:paddingBottom="20dp"
                 android:background="@drawable/border"
                 android:layout_centerVertical="true"
-                android:layout_below="@id/tvprofile"
-                android:layout_marginLeft="232dp"
+                android:layout_below="@id/tvcalatorii"
+                android:layout_marginLeft="5dp"
                 android:layout_marginTop="21dp"
                 android:textColor="@color/black"
 
                  />
 
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ticket"
+                android:layout_marginLeft="20dp"
+                android:layout_alignBottom="@+id/tvabonament"
+                android:layout_marginBottom="20dp"
 
-
+                />
 
 
 
 
         </RelativeLayout>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
         <ListView

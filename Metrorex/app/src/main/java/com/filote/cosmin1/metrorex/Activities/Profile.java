@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -80,6 +81,7 @@ public class Profile extends AppCompatActivity
     private int abonamentNew;
     private ActionBarDrawerToggle toggle;
     private BillingProcessor bp;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,16 @@ public class Profile extends AppCompatActivity
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("");
+        /** refresh for DB in app*/
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getIntArray(R.array.swipeRefreshColors));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadFromDB();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
 
         /** facebook and billingProcessor initializers*/
         bp = new BillingProcessor(this, null, this);
@@ -128,34 +140,10 @@ public class Profile extends AppCompatActivity
          * It also gathers the data about the user and show it in app*/
         checkAbonament();
 
+        loadFromDB();
+        showUpdatedInfo();
 
-        databaseReference.
-                addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
-                            if (firebaseAuth.getCurrentUser().getUid().toString().trim().equals(postSnapShot.getKey().toString().trim())) {
-                                UserInformation userInformation = postSnapShot.getValue(UserInformation.class);
-                                textViewCalatorii.setText(textViewCalatorii.getText().toString().trim() + userInformation.getNumarCalatorii());
-                                textViewCredit.setText(textViewCredit.getText().toString().trim() + userInformation.getCredit());
-                                textViewAbonament.setText(textViewAbonament.getText().toString().trim() + userInformation.getTipAbonament());
-                                if (userInformation.getTipAbonament().equals("Activ")) {
-                                    SimpleDateFormat fmtOut = new SimpleDateFormat("dd-MM-yyyy");
 
-                                    textViewAbonament.setText(textViewAbonament.getText().toString().trim() + "\n" +
-                                            "Expira la : " + fmtOut.format(userInformation.getExpirareAbonament()));
-                                }
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                        System.out.println("The read failed: " + databaseError.getMessage());
-
-                    }
-                });
 
         /** lists for Credit,Calatorie and Abonament */
 
@@ -196,7 +184,41 @@ public class Profile extends AppCompatActivity
      * checks if the abonament is still valid.It gets the correct time from TruTime.I used an api for this.
      */
 
-    private void checkAbonament() {
+    private void loadFromDB()
+    {
+        databaseReference.
+                addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapShot : dataSnapshot.getChildren()) {
+                            if (firebaseAuth.getCurrentUser().getUid().toString().trim().equals(postSnapShot.getKey().toString().trim())) {
+                                UserInformation userInformation = postSnapShot.getValue(UserInformation.class);
+                                textViewCalatorii.setText(textViewCalatorii.getText().toString().trim() + userInformation.getNumarCalatorii());
+                                textViewCredit.setText(textViewCredit.getText().toString().trim() + userInformation.getCredit());
+                                textViewAbonament.setText(textViewAbonament.getText().toString().trim() + userInformation.getTipAbonament());
+                                if (userInformation.getTipAbonament().equals("Activ")) {
+                                    SimpleDateFormat fmtOut = new SimpleDateFormat("dd-MM-yyyy");
+
+                                    textViewAbonament.setText(textViewAbonament.getText().toString().trim() + "\n" +
+                                            "Expira la : " + fmtOut.format(userInformation.getExpirareAbonament()));
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                        System.out.println("The read failed: " + databaseError.getMessage());
+
+                    }
+                });
+
+        showUpdatedInfo();
+
+    }
+    private void checkAbonament()
+    {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.child(firebaseAuth.getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -551,6 +573,7 @@ public class Profile extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
+
         } else {
             if ((listViewCredit.getVisibility() == View.VISIBLE) || (listViewAbonament.getVisibility() == View.VISIBLE) || (listViewCalatorie.getVisibility() == View.VISIBLE)) {
                 listViewCalatorie.setVisibility(View.GONE);
@@ -563,6 +586,7 @@ public class Profile extends AppCompatActivity
 
 
         }
+        loadFromDB();
 
     }
 
@@ -660,23 +684,25 @@ public class Profile extends AppCompatActivity
     public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
 
         final int creditNew = Integer.parseInt(productId.toString().substring(7));
+        if (bp.isPurchased(productId)) {
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
-                addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        int credit = dataSnapshot.child("credit").getValue(Integer.class);
-                        int creditNou = credit + creditNew;
-                        databaseReference.child(dataSnapshot.getKey()).child("credit").setValue(creditNou);
-                        showUpdatedInfo();
-                    }
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.child(firebaseAuth.getCurrentUser().getUid()).
+                    addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            int credit = dataSnapshot.child("credit").getValue(Integer.class);
+                            int creditNou = credit + creditNew;
+                            databaseReference.child(dataSnapshot.getKey()).child("credit").setValue(creditNou);
+                            showUpdatedInfo();
+                        }
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+        }
 
     }
 

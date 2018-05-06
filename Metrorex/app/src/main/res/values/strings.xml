@@ -28,4 +28,7 @@
     <string name="title_activity_profile">Profile</string>
     <string name="fieldsRequired">All fields required</string>
     <string name="cumpara_bilet_sau_abonament">Cu aceste credite poti cumpara bilete sau abonamente</string>
+    <string name="first_name_hint">Name</string>
+    <string name="Change_password">Change password</string>
+    <string name="button_update_profile_text">Update</string>
 </resources>

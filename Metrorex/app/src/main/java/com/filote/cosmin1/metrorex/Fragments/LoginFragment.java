@@ -76,6 +76,7 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
     private EditText editTextPasswordLogin;
     private TextView textViewLogin;
     private Button buttonFacebook;
+    private TextView forgotPass;
 
     private OnAddFragment mOnAddFragment;
 
@@ -103,9 +104,11 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
         editTextPasswordLogin = (EditText) view.findViewById(R.id.etpasswordlogin);
         textViewLogin = (TextView) view.findViewById(R.id.tvlogin);
         buttonFacebook = (LoginButton) view.findViewById(R.id.LoginFacebookBtn);
+        forgotPass = (TextView)view.findViewById(R.id.tv_forgot_pass);
         buttonLogin.setOnClickListener(this);
         textViewLogin.setOnClickListener(this);
         buttonFacebook.setOnClickListener(this);
+        forgotPass.setOnClickListener(this);
 
 
         progressDialog = new ProgressDialog(getActivity());
@@ -442,8 +445,32 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
                 displayError("You have to connect to the internet to be able to log in!");
         }
 
+        if(v == forgotPass){
+
+            if (AppStatus.getInstance(getActivity()).isOnline()) {
+                String email = editTextMailLogin.getText().toString().trim();
+                if(TextUtils.isEmpty(email)||(!isValidEmail(email))){
+                    Toast.makeText(getActivity().getApplicationContext(),"Enter a valid mail in Email Edit Text and press again!",Toast.LENGTH_LONG).show();
+                }
+                else{
+                    firebaseAuth.sendPasswordResetEmail(email)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(getActivity().getApplicationContext(), "Succes!Check your email!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }
+            } else
+                displayError("You have to connect to the internet to be able to log in!");
+        }
+
+
+
+
 
     }
+
 
     @Override
     public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {

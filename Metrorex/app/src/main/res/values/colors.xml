@@ -24,4 +24,11 @@
     <color name="orange">#EF6C00</color>
     <color name="brown">#6D4C41</color>
     <item name="errorColor" type="color">#ee5d2c</item>
+
+    <array name="swipeRefreshColors">
+        <item>@color/errorColor</item>
+        <item>@color/yellow</item>
+        <item>@color/colorPrimary</item>
+        <item>@color/colorPrimaryDark</item>
+    </array>
 </resources>

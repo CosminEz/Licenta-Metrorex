@@ -88,6 +88,16 @@
         android:paddingRight="50dp"
         android:layout_below="@+id/etpasswordlogin"
         android:layout_alignStart="@+id/imageView" />
+    <TextView
+        android:id="@+id/tv_forgot_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonLogin"
+        android:text="Forgot password?"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginTop="35dp"
+        android:textSize="20dp"/>
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/LoginFacebookBtn"

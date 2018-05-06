@@ -11,6 +11,16 @@ public class UserInformation {
     private String name;
     private String number;
     private String tipAbonament;
+    private String status;
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     private Date expirareAbonament;
     private int numarCalatorii;
     private int credit;
@@ -69,7 +79,7 @@ public class UserInformation {
         number = "null";
         credit = 0;
         tipAbonament = "Expirat";
-
+        status="null";
         numarCalatorii = 0;
 
     }
@@ -81,6 +91,7 @@ public class UserInformation {
         this.numarCalatorii = userInformation.getNumarCalatorii();
         this.credit = userInformation.getCredit();
         this.expirareAbonament = userInformation.getExpirareAbonament();
+        this.status=userInformation.getStatus();
 
     }
 
