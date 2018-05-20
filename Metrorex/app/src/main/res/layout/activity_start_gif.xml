@@ -15,4 +15,13 @@
         android:scaleType="fitXY"
         />
 
+    <ImageView android:id="@+id/splashscreen"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:src="@drawable/seoul_metro_logo"
+        android:layout_centerInParent="true"/>
+
+
+
+
 </RelativeLayout>

@@ -40,9 +40,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 
-/**
- * Created by Cristian on 07.07.2017.
- */
+
 
 public class RegisterFragment extends LoginRegisterFragmentBase implements View.OnClickListener {
 
