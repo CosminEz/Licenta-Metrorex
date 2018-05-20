@@ -12,6 +12,9 @@ public class UserInformation {
     private String number;
     private String tipAbonament;
     private String status;
+    private Date expirareAbonament;
+    private int numarCalatorii;
+    private int credit;
 
     public String getStatus() {
         return status;
@@ -21,9 +24,7 @@ public class UserInformation {
         this.status = status;
     }
 
-    private Date expirareAbonament;
-    private int numarCalatorii;
-    private int credit;
+
 
     public int getCredit() {
         return credit;
