@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -230,8 +231,12 @@ public class Profile extends AppCompatActivity
                                 @Override
                                 public void run() {
                                     try {
-                                        TrueTime.build().initialize();
-                                        Date date = TrueTime.now();
+                                        while(!TrueTime.isInitialized()) {
+                                            TrueTime.build().initialize();
+                                        }
+
+                                          Date date = TrueTime.now();
+                                        Log.e("Data-",date.toString());
                                         if (date.after(dataExpirareAbonament)) {
                                             databaseReference.child(dataSnapshot.getKey()).child("tipAbonament").setValue("Expirat");
                                         }
@@ -387,7 +392,9 @@ public class Profile extends AppCompatActivity
                                     @Override
                                     public void run() {
                                         try {
-                                            TrueTime.build().initialize();
+                                            while(!TrueTime.isInitialized()) {
+                                                TrueTime.build().initialize();
+                                            }
                                             Date date = TrueTime.now();
                                             calendar.setTime(date);
 
@@ -508,7 +515,9 @@ public class Profile extends AppCompatActivity
                                                 @Override
                                                 public void run() {
                                                     try {
-                                                        TrueTime.build().initialize();
+                                                        while(!TrueTime.isInitialized()) {
+                                                            TrueTime.build().initialize();
+                                                        }
                                                         Date date = TrueTime.now();
                                                         final long diff = abonamentExpirare.getTime() - date.getTime();
                                                         runOnUiThread(new Runnable() {
@@ -529,11 +538,11 @@ public class Profile extends AppCompatActivity
 
                                         }
                                         if (calatorie > 0 && abonament.equals("Expirat")) {
-                                            showUpdatedInfo();
                                             UserInformation userInformation = new UserInformation(dataSnapshot.getValue(UserInformation.class));
                                             userInformation.setNumarCalatorii(calatorie - 1);
                                             int calatorieNew = calatorie - 1;
                                             databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
+                                            showUpdatedInfo();
                                             Toast.makeText(Profile.this, "Succes! Calatorii ramase:" + calatorieNew, Toast.LENGTH_LONG).show();
                                         } else {
                                             if (abonament.equals("Expirat") && calatorie == 0) {
