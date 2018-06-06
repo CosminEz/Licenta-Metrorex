@@ -82,7 +82,7 @@ public class EditProfile extends AppCompatActivity {
 
                     }
                 });
-
+// TODO: 6/6/2018 sa nu poata sa dea update cu campurile goale + sa fac change password sa apara doar daca nu esti logat cu fb+ sa mearga la mail
         update = (Button)findViewById(R.id.button_update_profile);
         update.setOnClickListener(new View.OnClickListener() {
             @Override

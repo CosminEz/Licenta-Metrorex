@@ -55,7 +55,7 @@
             />
 
     <TextView
-        android:id="@+id/tvcreit_pret_adapter"
+        android:id="@+id/tvcredit_pret_adapter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="120 Lei"

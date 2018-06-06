@@ -135,7 +135,7 @@ public class Profile extends AppCompatActivity
 
 
         textViewUserEmail = (TextView) findViewById(R.id.tvprofile);
-        textViewUserEmail.setText("Welcome " + firebaseAuth.getCurrentUser().getEmail().toString().trim() + " !");
+        textViewUserEmail.setText("Bine ai venit " + firebaseAuth.getCurrentUser().getEmail().toString().trim() + " !");
 
         /** In OnCreate it checks the database and corrects the data in the database.
          * It also gathers the data about the user and show it in app*/
@@ -338,9 +338,9 @@ public class Profile extends AppCompatActivity
                                     userInformation.setCredit(creditNou);
                                     userInformation.setNumarCalatorii(calatorieNou);
                                     databaseReference.child(dataSnapshot.getKey()).setValue(userInformation);
-                                    Toast.makeText(Profile.this, "You added " + calatorieNew + " calatorii", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this, "Ai adaugat " + calatorieNew + " calatorii!", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    Toast.makeText(Profile.this, "You don't have enough credit", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Profile.this, "Nu ai destul credit!", Toast.LENGTH_SHORT).show();
                                     return;
                                 }
 
@@ -431,7 +431,7 @@ public class Profile extends AppCompatActivity
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Toast.makeText(Profile.this, "You added " + abonamentNew + " zile la abonament", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(Profile.this, "Ai adaugat " + abonamentNew + " zile la abonament!", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
 
@@ -439,7 +439,7 @@ public class Profile extends AppCompatActivity
                                                 runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        Toast.makeText(Profile.this, "You don't have enough credit", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(Profile.this, "Nu ai destul credit!", Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
 

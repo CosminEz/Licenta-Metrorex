@@ -83,7 +83,7 @@ public class CreditAdapter extends BaseAdapter {
 
         public ViewHolder(View view) {
             mCreditTextView = (TextView) view.findViewById(R.id.tvcredit_adapter);
-            mCreditPretTextView = (TextView)view.findViewById(R.id.tvcreit_pret_adapter);
+            mCreditPretTextView = (TextView)view.findViewById(R.id.tvcredit_pret_adapter);
         }
     }
 

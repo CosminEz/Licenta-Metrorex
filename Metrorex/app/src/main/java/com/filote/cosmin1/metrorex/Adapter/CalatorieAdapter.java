@@ -68,6 +68,7 @@ public class CalatorieAdapter extends BaseAdapter {
 
         Integer Calatorie = (Integer) getItem(currentPosition);
         viewHolder.mCalatorieTextView.setText("Calatorii:" + Calatorie);
+        viewHolder.mCalatoriePretTextView.setText(2*Calatorie +" credite");
 
         return view;
 
@@ -77,9 +78,11 @@ public class CalatorieAdapter extends BaseAdapter {
 
     class ViewHolder {
         protected TextView mCalatorieTextView;
+        protected TextView mCalatoriePretTextView;
 
         public ViewHolder(View view) {
             mCalatorieTextView = (TextView) view.findViewById(R.id.tvcalatorie_adapter);
+            mCalatoriePretTextView = (TextView) view.findViewById(R.id.tvcalatorii_pret_adapter);
         }
     }
 
