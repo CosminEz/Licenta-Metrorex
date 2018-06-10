@@ -100,15 +100,15 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
 
 
         buttonLogin = (Button) view.findViewById(R.id.buttonLogin);
-        editTextMailLogin = (EditText) view.findViewById(R.id.etusernamelogin);
+        editTextMailLogin = (EditText) view.findViewById(R.id.etetusernamelogin);
         editTextPasswordLogin = (EditText) view.findViewById(R.id.etpasswordlogin);
         textViewLogin = (TextView) view.findViewById(R.id.tvlogin);
         buttonFacebook = (LoginButton) view.findViewById(R.id.LoginFacebookBtn);
-        forgotPass = (TextView)view.findViewById(R.id.tv_forgot_pass);
+        //forgotPass = (TextView)view.findViewById(R.id.tv_forgot_pass);
         buttonLogin.setOnClickListener(this);
         textViewLogin.setOnClickListener(this);
         buttonFacebook.setOnClickListener(this);
-        forgotPass.setOnClickListener(this);
+        //forgotPass.setOnClickListener(this);
 
 
         progressDialog = new ProgressDialog(getActivity());

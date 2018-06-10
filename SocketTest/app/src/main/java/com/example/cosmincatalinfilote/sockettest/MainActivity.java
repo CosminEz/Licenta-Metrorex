@@ -1,8 +1,12 @@
 package com.example.cosmincatalinfilote.sockettest;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -76,19 +80,21 @@ public class MainActivity extends Activity {
 
             try {
                 Socket socket = new Socket(dstAddress, dstPort);
-                InputStream inputStream = socket.getInputStream();
-                ByteArrayOutputStream byteArrayOutputStream =
-                        new ByteArrayOutputStream(1024);
-                byte[] buffer = new byte[1024];
+                DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
+                dOut.writeByte(1);
+                dOut.writeUTF("salut");
+                dOut.flush(); // Send off the data
+                // Send the exit message
+                dOut.writeByte(-1);
+                dOut.flush();
 
-                int bytesRead;
-                while ((bytesRead = inputStream.read(buffer)) != -1){
-                    byteArrayOutputStream.write(buffer, 0, bytesRead);
-                }
+                dOut.close();
+
+
 
                 socket.close();
-                response = byteArrayOutputStream.toString("UTF-8");
-                Log.e("Raspuns",response);
+                //response = byteArrayOutputStream.toString("UTF-8");
+
 
             } catch (UnknownHostException e) {
                 // TODO Auto-generated catch block

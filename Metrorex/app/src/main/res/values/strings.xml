@@ -31,4 +31,5 @@
     <string name="first_name_hint">Nume</string>
     <string name="Change_password">Change password</string>
     <string name="button_update_profile_text">Update</string>
+    <string name="cumpara_calatorii">Aceste calatorii va permit accesul doar scanand codul.</string>
 </resources>
