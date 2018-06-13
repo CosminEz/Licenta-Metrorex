@@ -155,13 +155,13 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
 
         LoginManager.getInstance().logOut();
 
-        /** callback for facebook,if succesfull then calls handleFacebookAccesToken else the user is logged out */
+        /** callback for facebook,if succesfull then calls handleFacebookAccessToken else the user is logged out */
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        handleFacebookAccesToken(loginResult.getAccessToken());
+                        handleFacebookAccessToken(loginResult.getAccessToken());
                     }
 
                     @Override
@@ -207,7 +207,7 @@ public class LoginFragment extends LoginRegisterFragmentBase implements View.OnC
      *
      * @param token
      */
-    private void handleFacebookAccesToken(AccessToken token) {
+    private void handleFacebookAccessToken(AccessToken token) {
 
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         firebaseAuth.signInWithCredential(credential)

@@ -32,4 +32,5 @@
     <string name="Change_password">Change password</string>
     <string name="button_update_profile_text">Update</string>
     <string name="cumpara_calatorii">Aceste calatorii va permit accesul doar scanand codul.</string>
+    <string name="cumpara_abonament">Acest abonament va permite acces nelimitat.</string>
 </resources>

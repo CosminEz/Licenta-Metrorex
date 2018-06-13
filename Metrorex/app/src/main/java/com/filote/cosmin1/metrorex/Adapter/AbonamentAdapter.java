@@ -67,7 +67,11 @@ public class AbonamentAdapter extends BaseAdapter {
         }
 
         Integer Abonament = (Integer) getItem(currentPosition);
-        viewHolder.mAbonamentTextView.setText("Abonament:" + Abonament);
+        if(Abonament == 1)
+            viewHolder.mAbonamentTextView.setText("Abonament:" + Abonament+" zi");
+        else
+            viewHolder.mAbonamentTextView.setText("Abonament:" + Abonament+" zile");
+        viewHolder.mAbonamentPretTextView.setText(4*Abonament +" credite");
 
         return view;
 
@@ -77,9 +81,11 @@ public class AbonamentAdapter extends BaseAdapter {
 
     class ViewHolder {
         protected TextView mAbonamentTextView;
+        protected TextView mAbonamentPretTextView;
 
         public ViewHolder(View view) {
             mAbonamentTextView = (TextView) view.findViewById(R.id.tvabonament_adapter);
+            mAbonamentPretTextView = (TextView) view.findViewById(R.id.tvabonament_pret_adapter);
         }
     }
 }
