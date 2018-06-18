@@ -81,12 +81,12 @@ public class MainActivity extends Activity {
             try {
                 Socket socket = new Socket(dstAddress, dstPort);
                 DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-                dOut.writeByte(1);
-                dOut.writeUTF("salut");
+                //dOut.writeByte(1);
+                dOut.writeUTF("0");
                 dOut.flush(); // Send off the data
                 // Send the exit message
-                dOut.writeByte(-1);
-                dOut.flush();
+                //dOut.writeByte(-1);
+                //dOut.flush();
 
                 dOut.close();
 

@@ -24,8 +24,6 @@ public class UserInformation {
         this.status = status;
     }
 
-
-
     public int getCredit() {
         return credit;
     }
